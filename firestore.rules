@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{id} {      
+      allow read, create
+      allow update: if isSignedIn() && isOwner()
+    }
+    match /gigs/{id} {
+    	allow read, write: if isSignedIn()
+    }
+    match /songs/{id} {
+    	allow read, write: if isSignedIn()	
+    }
+    match /configurations/{id} {
+      allow read, write: if isSignedIn()
+    }
+     match /files/{id} {
+    	allow read, write: if isSignedIn()
+    }
+    match /bands/{id} {
+        allow read, write: if isSignedIn()
+    }
+    match /exercises/{id} {
+    	allow read, write : if isSignedIn()
+    }
+    
+    
+    /// Functions ///
+    function isSignedIn() {
+    	return request.auth != null;
+    }
+    
+    function isOwner() {
+    	return request.auth.uid == resource.data.uid
+    }
+  }
+}

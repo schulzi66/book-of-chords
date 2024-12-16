@@ -1,0 +1,33 @@
+
+<div class="flex items-center justify-center min-h-screen bg-surface-dim">
+    <div class="w-full max-w-md p-6 rounded-lg shadow-lg bg-surface-container">
+        <!-- Header -->
+        <div class="mb-8 text-center">
+            <h1 class="mb-2 text-2xl font-bold">Book of Chords</h1>
+            <p>Welcome Back. Please sign in to continue</p>
+        </div>
+
+        <!-- Google Sign In Button -->
+        <button mat-raised-button
+                class="w-full py-3 bg-primary"
+                (click)="userStore.login()">
+            <div class="flex items-center justify-center gap-3">
+                <!-- Google Icon -->
+                <img src="assets/google-icon.svg"
+                     alt="Google logo"
+                     class="w-5 h-5"
+                     aria-hidden="true">
+                <span class="font-medium">Continue with Google</span>
+            </div>
+        </button>
+
+        <!-- Optional Footer -->
+        <p class="mt-6 text-sm text-center">
+            By continuing, you agree to our
+            <a href="#"
+               class="font-medium text-primary hover:text-primary-700">Terms of Service</a> and
+            <a href="#"
+               class="font-medium text-primary hover:text-primary-700">Privacy Policy</a>
+        </p>
+    </div>
+</div>

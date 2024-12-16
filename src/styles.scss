@@ -1,0 +1,49 @@
+@use '@angular/material' as mat;
+@use '../styles/_theme-colors' as custom-theme;
+// @use '../styles/custom-theme' as custom-theme;
+// @use '../styles/colors.scss';
+@use '../styles/tailwind.scss';
+
+html {
+    color-scheme: light dark;
+    @include mat.theme(
+        (
+            // color: custom-theme.$tertiary-palette,
+            // tertiary: custom-theme.$primary-palette,
+            color: custom-theme.$primary-palette,
+            tertiary: custom-theme.$tertiary-palette,
+            typography: Roboto,
+            density: 0,
+            use-system-variables: true
+        )
+    );
+}
+
+:root {
+    @include mat.sidenav-overrides(
+        (
+            content-background-color: var(--mat-sys-surface-container),
+            container-width: 'w-1/4',
+        )
+    );
+
+    // @include mat.toolbar-overrides(
+    //     (
+    //         container-background-color: var(--mat-sys-surface-container),
+    //     )
+    // );
+}
+
+// :root {
+//     @include mat.icon-overrides(
+//         (
+//             color: #FF9800,
+//         )
+//     );
+
+//     // @include mat.icon-button-overrides(
+//     //     (
+//     //         icon-color: #ff9800,
+//     //     )
+//     // );
+// }
