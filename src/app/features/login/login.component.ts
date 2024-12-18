@@ -7,7 +7,6 @@ import { UserStore } from '../../shared/state/user.store';
     selector: 'boc-login',
     imports: [CommonModule, MatButtonModule],
     templateUrl: './login.component.html',
-    standalone: true,
 })
 export class LoginComponent {
     public readonly userStore = inject(UserStore);

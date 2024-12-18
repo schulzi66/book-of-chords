@@ -1,7 +1,7 @@
 <div class="flex flex-col h-screen">
     <mat-sidenav-container class="flex-grow">
         <!-- Navigation Rail - Only for medium and large screens -->
-        @if (!(isCompact$ | async)) {
+        @if (!(uiStore.isCompact())) {
         <mat-sidenav #drawer
                      [mode]="'side'"
                      [opened]="true"
@@ -46,45 +46,13 @@
         <!-- Main Content Area -->
         <mat-sidenav-content class="flex flex-col">
             <!-- Top App Bar  -->
-            <mat-toolbar>
-                @if(!(isLarge$ | async) && hasSelectedItem) {
-                <button mat-icon-button
-                        (click)="navigateBack()">
-                    <mat-icon>arrow_back</mat-icon>
-                </button>
-                }
-                <span class="ml-4">{{title}}</span>
-                <span class="flex-grow"></span>
-                <!-- Detail view specific actions -->
-                <button mat-icon-button>
-                    <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-icon-button>
-                    <mat-icon>more_vert</mat-icon>
-                </button>
-            </mat-toolbar>
+            <router-outlet name="toolbar"></router-outlet>
 
-            <!-- List-Detail Container -->
-            <div class="flex flex-grow overflow-hidden">
-                <!-- List Panel -->
-                <div class="h-[calc(100vh-64px)] overflow-y-auto"
-                     [class.w-72]="(isLarge$ | async)"
-                     [class.w-full]="!(isLarge$ | async) || !hasSelectedItem"
-                     [class.hidden]="!(isLarge$ | async) && hasSelectedItem"
-                     [class.border-r]="(isLarge$ | async)"
-                     [class.bg-surface-container-low]="(isLarge$ | async) && hasSelectedItem">
-                    <router-outlet name="list"></router-outlet>
-                </div>
-
-                <!-- Detail Panel -->
-                <div class="flex-grow overflow-y-auto"
-                     [class.hidden]="!(isLarge$ | async) && !hasSelectedItem">
-                    <router-outlet></router-outlet>
-                </div>
-            </div>
+            <!-- Main Content -->
+            <router-outlet></router-outlet>
 
             <!-- Bottom Navigation - Only for compact screens -->
-            @if (isCompact$ | async) {
+            @if (uiStore.isCompact()) {
             <mat-toolbar class="fixed bottom-0 left-0 right-0 border-t">
                 <nav class="flex justify-around w-full">
                     @for (item of navItems; track $index) {

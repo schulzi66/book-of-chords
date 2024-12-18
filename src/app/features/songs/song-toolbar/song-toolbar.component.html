@@ -1,0 +1,16 @@
+<mat-toolbar>
+    @if(!(uiStore.isLarge()) && songsStore.selectedSong()) {
+    <button mat-icon-button class="mr-2"
+            (click)="songsStore.deselectSong()">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+    }
+    <span>{{songsStore.selectedSong()?.name}}</span>
+    <span class="flex-grow"></span>
+    <button mat-icon-button>
+        <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button>
+        <mat-icon>more_vert</mat-icon>
+    </button>
+</mat-toolbar>

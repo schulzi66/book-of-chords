@@ -5,6 +5,5 @@ import { RouterOutlet } from '@angular/router';
     selector: 'boc-root',
     imports: [RouterOutlet],
     templateUrl: './app.component.html',
-    standalone: true,
 })
 export class AppComponent {}

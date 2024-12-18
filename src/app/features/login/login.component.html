@@ -1,6 +1,6 @@
 
-<div class="flex items-center justify-center min-h-screen bg-surface-dim">
-    <div class="w-full max-w-md p-6 rounded-lg shadow-lg bg-surface-container">
+<div class="flex items-center justify-center min-h-screen bg-surface-container">
+    <div class="w-full max-w-md p-6 rounded-lg shadow-lg bg-surface">
         <!-- Header -->
         <div class="mb-8 text-center">
             <h1 class="mb-2 text-2xl font-bold">Book of Chords</h1>
@@ -8,8 +8,8 @@
         </div>
 
         <!-- Google Sign In Button -->
-        <button mat-raised-button
-                class="w-full py-3 bg-primary"
+        <button mat-flat-button
+                class="w-full py-3"
                 (click)="userStore.login()">
             <div class="flex items-center justify-center gap-3">
                 <!-- Google Icon -->

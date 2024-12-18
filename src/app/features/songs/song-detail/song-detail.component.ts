@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'boc-song-detail',
-    standalone: true,
     imports: [CommonModule],
     template: `
         <div class="p-4">

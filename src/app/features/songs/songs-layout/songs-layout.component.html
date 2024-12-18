@@ -1,0 +1,17 @@
+<div class="flex flex-grow overflow-hidden">
+    <!-- List Panel -->
+    <div class="h-[calc(100vh-64px)] overflow-y-auto"
+         [class.w-72]="uiStore.isLarge()"
+         [class.w-full]="!(uiStore.isLarge()) || !songsStore.selectedSong()"
+         [class.hidden]="!(uiStore.isLarge()) && songsStore.selectedSong()"
+         [class.border-r]="uiStore.isLarge()"
+         [class.bg-surface-container-low]="uiStore.isLarge() && songsStore.selectedSong()">
+        <router-outlet name="list"></router-outlet>
+    </div>
+
+    <!-- Detail Panel -->
+    <div class="flex-grow overflow-y-auto"
+         [class.hidden]="!(uiStore.isLarge()) && !songsStore.selectedSong()">
+        <router-outlet></router-outlet>
+    </div>
+</div>

@@ -4,7 +4,7 @@ import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 
-export interface User {
+interface User {
     uid: string;
     email: string;
     photoURL?: string;

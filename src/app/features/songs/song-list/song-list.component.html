@@ -1,7 +1,8 @@
 <mat-nav-list>
-    @for (song of songs; track song.id) {
-    <a mat-list-item (click)="onSongSelect(song.id)">
-        <span matListItemTitle>{{song.title}}</span>
+    @for (song of songsStore.songs(); track song.id) {
+    <a mat-list-item
+       (click)="songsStore.selectSong(song.id)">
+        <span matListItemTitle>{{song.name}}</span>
         <!-- other list item content -->
     </a>
     }
