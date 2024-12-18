@@ -1,82 +1,105 @@
-<mat-sidenav-container [hasBackdrop]="!uiStore.isPinned()"
-                       class="h-screen">
-    <!-- Navigation Drawer for large screens -->
-    <mat-sidenav #drawer
-                 [mode]="(isHandset$ | async) ? 'over' : 'side'"
-                 [opened]="!(isHandset$ | async) && uiStore.isPinned()"
-                 class="[&>div]:flex [&>div]:flex-col">
-        <mat-toolbar>Book of Chords</mat-toolbar>
+<div class="flex flex-col h-screen">
+    <mat-sidenav-container class="flex-grow">
+        <!-- Navigation Rail - Only for medium and large screens -->
+        @if (!(isCompact$ | async)) {
+        <mat-sidenav #drawer
+                     [mode]="'side'"
+                     [opened]="true"
+                     class="[&>div]:flex [&>div]:flex-col">
+            <!-- Primary Action Button -->
+            <div class="flex flex-col items-center flex-grow gap-4 p-2">
+                <button mat-fab
+                        color="primary"
+                        class="mt-2">
+                    <mat-icon>add</mat-icon>
+                </button>
 
-
-        <mat-nav-list class="flex flex-col flex-grow">
-            @for (item of navItems; track $index) {
-            <a mat-list-item
-               [routerLink]="item.route"
-               routerLinkActive="active">
-                <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
-                <span matListItemTitle>{{item.label}}</span>
-            </a>
-            }
-
-        </mat-nav-list>
-
-        <mat-nav-list>
-            <!-- Maybe User button instead with settings and logout -->
-            <a mat-list-item
-               (click)="userStore.logout()">
-                <mat-icon matListItemIcon>logout</mat-icon>
-                <span matListItemTitle>Logout</span>
-            </a>
-            <a mat-list-item
-                (click)="uiStore.toggleDarkMode()">
-                <mat-icon matListItemIcon>{{ uiStore.darkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-                <span matListItemTitle>{{ uiStore.darkMode() ? 'Light Mode' : 'Dark Mode' }}</span>
-            </a>
-            <a mat-list-item
-               (click)="uiStore.togglePinned()">
-                <mat-icon matListItemIcon>push_pin</mat-icon>
-                <span matListItemTitle>{{ uiStore.isPinned() ? 'Unpin Sidebar' : 'Pin Sidebar' }}</span>
-            </a>
-        </mat-nav-list>
-
-
-    </mat-sidenav>
-
-    <mat-sidenav-content>
-        <!-- Top App Bar -->
-        @if (!(isHandset$ | async) && !drawer.opened) {
-        <mat-toolbar class="!bg-surface-container">
-            <button mat-icon-button
-                    (click)="drawer.toggle()">
-                <mat-icon>menu</mat-icon>
-            </button>
-
-            <!-- Todo add top app bar -->
-        </mat-toolbar>
-        }
-
-        <!-- Main Content -->
-        <div class="pt-4">
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-            <router-outlet></router-outlet>
-        </div>
-
-        <!-- Bottom Navigation for mobile -->
-        @if (isHandset$ | async) {
-        <mat-toolbar class="fixed bottom-0 left-0 right-0">
-            <nav class="flex justify-around w-full">
-                @for (item of navItems; track $index) {
-                <div class="flex flex-col items-center">
-                    <button mat-icon-button
-                            [routerLink]="item.route"
-                            routerLinkActive="active">
-                        <mat-icon>{{item.icon}}</mat-icon>
-                    </button>
-                    <span class="inline-block -mt-2 text-xs">{{item.label}}</span>
+                <!-- Navigation Items -->
+                <div class="flex flex-col items-center gap-4 mt-4">
+                    @for (item of navItems; track $index) {
+                    <div class="flex flex-col items-center text-center">
+                        <button mat-icon-button
+                                [routerLink]="item.route"
+                                routerLinkActive="active">
+                            <mat-icon>{{item.icon}}</mat-icon>
+                        </button>
+                        <span class="text-xs">{{item.label}}</span>
+                    </div>
+                    }
                 </div>
-                }
-            </nav>
-        </mat-toolbar>
+            </div>
+
+            <!-- Bottom Actions -->
+            <div class="flex flex-col items-center gap-2 p-2">
+                <button mat-icon-button
+                        (click)="uiStore.toggleDarkMode()">
+                    <mat-icon>{{ uiStore.darkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+                </button>
+                <button mat-icon-button
+                        (click)="userStore.logout()">
+                    <mat-icon>logout</mat-icon>
+                </button>
+            </div>
+        </mat-sidenav>
         }
-    </mat-sidenav-content>
-</mat-sidenav-container>
+
+        <!-- Main Content Area -->
+        <mat-sidenav-content class="flex flex-col">
+            <!-- Top App Bar  -->
+            <mat-toolbar>
+                @if(!(isLarge$ | async) && hasSelectedItem) {
+                <button mat-icon-button
+                        (click)="navigateBack()">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                }
+                <span class="ml-4">{{title}}</span>
+                <span class="flex-grow"></span>
+                <!-- Detail view specific actions -->
+                <button mat-icon-button>
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button>
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </mat-toolbar>
+
+            <!-- List-Detail Container -->
+            <div class="flex flex-grow overflow-hidden">
+                <!-- List Panel -->
+                <div class="h-[calc(100vh-64px)] overflow-y-auto"
+                     [class.w-72]="(isLarge$ | async)"
+                     [class.w-full]="!(isLarge$ | async) || !hasSelectedItem"
+                     [class.hidden]="!(isLarge$ | async) && hasSelectedItem"
+                     [class.border-r]="(isLarge$ | async)"
+                     [class.bg-surface-container-low]="(isLarge$ | async) && hasSelectedItem">
+                    <router-outlet name="list"></router-outlet>
+                </div>
+
+                <!-- Detail Panel -->
+                <div class="flex-grow overflow-y-auto"
+                     [class.hidden]="!(isLarge$ | async) && !hasSelectedItem">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation - Only for compact screens -->
+            @if (isCompact$ | async) {
+            <mat-toolbar class="fixed bottom-0 left-0 right-0 border-t">
+                <nav class="flex justify-around w-full">
+                    @for (item of navItems; track $index) {
+                    <div class="flex flex-col items-center">
+                        <button mat-icon-button
+                                [routerLink]="item.route"
+                                routerLinkActive="active">
+                            <mat-icon>{{item.icon}}</mat-icon>
+                        </button>
+                        <span class="text-xs">{{item.label}}</span>
+                    </div>
+                    }
+                </nav>
+            </mat-toolbar>
+            }
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

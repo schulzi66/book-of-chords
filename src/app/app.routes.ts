@@ -9,7 +9,7 @@ export const routes: Routes = [
     },
     {
         path: 'login',
-        loadComponent: () => import('./feature/login/login.component').then(c => c.LoginComponent),
+        loadComponent: () => import('./features/login/login.component').then(c => c.LoginComponent),
         canActivate: [redirectToSongsIfAuthenticated],
     },
     {
@@ -19,8 +19,21 @@ export const routes: Routes = [
         children: [
             {
                 path: 'songs',
-                loadComponent: () => import('./feature/songs/songs.component').then(c => c.SongsComponent),
+                children: [
+                    {
+                        path: '',
+                        loadComponent: () => import('./features/songs/song-list/song-list.component')
+                            .then(c => c.SongListComponent),
+                        outlet: 'list'
+                    },
+                    {
+                        path: ':id',
+                        loadComponent: () => import('./features/songs/song-detail/song-detail.component')
+                            .then(c => c.SongDetailComponent)
+                    }
+                ]
             },
+            // Add similar patterns for gigs and exercises
         ],
     },
 ];

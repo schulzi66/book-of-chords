@@ -22,16 +22,17 @@ html {
 :root {
     @include mat.sidenav-overrides(
         (
-            content-background-color: var(--mat-sys-surface-container),
-            container-width: 'w-1/4',
+            container-background-color: var(--mat-sys-surface-container),
+            container-shape: 0px,
+            container-width: 'auto'
         )
     );
 
-    // @include mat.toolbar-overrides(
-    //     (
-    //         container-background-color: var(--mat-sys-surface-container),
-    //     )
-    // );
+    @include mat.toolbar-overrides(
+        (
+            container-background-color: var(--mat-sys-surface-container),
+        )
+    );
 }
 
 // :root {
