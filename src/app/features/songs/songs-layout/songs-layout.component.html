@@ -1,3 +1,7 @@
+@if (songsStore.loading()) {
+<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}
+
 <div class="flex flex-grow overflow-hidden">
     <!-- List Panel -->
     <div class="h-[calc(100vh-64px)] overflow-y-auto"

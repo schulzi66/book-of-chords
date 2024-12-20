@@ -1,6 +1,7 @@
-import { inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { inject, InjectionToken } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
+import { collection, Firestore, getDocs, orderBy, query, where } from '@angular/fire/firestore';
+import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 
 interface SongSection {
     name: string;
@@ -27,30 +28,49 @@ type SongsState = {
     error: string | undefined;
 };
 
-export const SongsStore = signalStore(
-    withState<SongsState>({
-        songs: [
-            { id: '1', name: 'Song 1' },
-            { id: '2', name: 'Song 2' },
-            { id: '3', name: 'Song 3' },
-        ],
-        selectedSong: undefined,
-        loading: false,
-        error: undefined,
-    }),
-    withMethods(store => {
-        const router = inject(Router);
-        const route = inject(ActivatedRoute);
+const INITIAL_SONGS_STATE = new InjectionToken<SongsState>('SongsState', {
+    factory: () => {
+        const songs = localStorage.getItem('songs') ? JSON.parse(localStorage.getItem('songs')!) : [];
 
         return {
-            selectSong: (id: string) => {
+            songs,
+            selectedSong: undefined,
+            loading: songs.length === 0,
+            error: undefined,
+        };
+    },
+});
+
+export const SongsStore = signalStore(
+    withState(() => inject(INITIAL_SONGS_STATE)),
+    withMethods(store => {
+        const firestore = inject(Firestore);
+        const auth = inject(Auth);
+
+        return {
+            selectSong: (id: string): void => {
                 patchState(store, { selectedSong: store.songs().find(song => song.id === id) });
-                router.navigate(['/songs', id]);
             },
-            deselectSong: () => {
+            deselectSong: (): void => {
                 patchState(store, { selectedSong: undefined });
-                router.navigate(['..'], { relativeTo: route });
+            },
+            saveSongs: (): void => {
+                // TODO save songs to firestore
+                localStorage.setItem('songs', JSON.stringify(store.songs()));
+            },
+            loadSongs: async (): Promise<void> => {
+                const songsCollection = collection(firestore, 'songs');
+                const q = query(songsCollection, where('uid', '==', auth.currentUser?.uid), orderBy('name', 'asc'));
+                const songs = await getDocs(q);
+
+                patchState(store, { songs: songs.docs.map(doc => doc.data() as Song), loading: false });
+                localStorage.setItem('songs', JSON.stringify(store.songs()));
             },
         };
+    }),
+    withHooks({
+        onInit: store => {
+            store.loadSongs();
+        },
     }),
 );

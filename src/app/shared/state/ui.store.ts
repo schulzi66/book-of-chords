@@ -44,6 +44,6 @@ export const UiStore = signalStore(
         },
     }),
     withMethods(store => ({
-        toggleDarkMode: () => patchState(store, { darkMode: !store.darkMode() }),
+        toggleDarkMode: (): void => patchState(store, { darkMode: !store.darkMode() }),
     })),
 );

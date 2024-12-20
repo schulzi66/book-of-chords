@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { songResolver } from './features/songs/resolver/song.resolver';
+import { songsResolver } from './features/songs/resolver/songs.resolver';
 import { SongsStore } from './features/songs/state/songs.store';
 import { redirectToLoginIfNotAuthenticated, redirectToSongsIfAuthenticated } from './shared/guards/auth.guard';
 
@@ -21,6 +23,7 @@ export const routes: Routes = [
             {
                 path: 'songs',
                 providers: [SongsStore],
+                resolve: [songsResolver],
                 children: [
                     {
                         path: '',
@@ -34,8 +37,7 @@ export const routes: Routes = [
                             {
                                 path: ':id',
                                 loadComponent: () => import('./features/songs/song-detail/song-detail.component').then(c => c.SongDetailComponent),
-
-                                // Todo add a resolver to fetch the song
+                                resolve: [songResolver],
                             },
                         ],
                     },

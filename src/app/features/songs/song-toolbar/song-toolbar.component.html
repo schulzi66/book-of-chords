@@ -1,7 +1,7 @@
 <mat-toolbar>
     @if(!(uiStore.isLarge()) && songsStore.selectedSong()) {
     <button mat-icon-button class="mr-2"
-            (click)="songsStore.deselectSong()">
+            (click)="deselectSong()">
         <mat-icon>arrow_back</mat-icon>
     </button>
     }

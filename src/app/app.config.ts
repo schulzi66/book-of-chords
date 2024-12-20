@@ -57,6 +57,7 @@ export const appConfig: ApplicationConfig = {
         // }),
         provideFirestore(() => {
             const firestore = getFirestore();
+            // TODO find out how to enable persistence for offline mode
             if (environment.useEmulators) {
                 connectFirestoreEmulator(firestore, '127.0.0.1', 7070);
             }
